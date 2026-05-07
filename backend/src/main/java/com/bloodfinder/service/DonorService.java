@@ -66,7 +66,7 @@ public class DonorService {
     /** Get all donors (admin / public listing). */
     @Transactional(readOnly = true)
     public List<DonorResponse> getAllDonors() {
-        return donorRepository.findAll()
+        return donorRepository.findAllWithUser()
             .stream().map(this::toResponse).collect(Collectors.toList());
     }
 

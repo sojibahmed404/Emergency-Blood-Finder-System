@@ -15,12 +15,15 @@ public interface DonorRepository extends JpaRepository<Donor, Long> {
 
     long countByAvailabilityTrue();
 
+    @Query("SELECT d FROM Donor d JOIN FETCH d.user")
+    List<Donor> findAllWithUser();
+
     /**
      * Search donors by optional blood group and optional location (case-insensitive).
      * Passing null for either param disables that filter.
      */
     @Query("""
-        SELECT d FROM Donor d
+        SELECT d FROM Donor d JOIN FETCH d.user
         WHERE (:bloodGroup IS NULL OR d.bloodGroup = :bloodGroup)
           AND (:location   IS NULL OR LOWER(d.location) LIKE LOWER(CONCAT('%', :location, '%')))
         ORDER BY d.availability DESC, d.id ASC
