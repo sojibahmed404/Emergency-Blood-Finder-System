@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply font-sans antialiased text-gray-900 bg-gray-50;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply font-heading;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-950;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-blood-700 rounded-full;
+  }
+}
+
+@layer components {
+  /* Blood type badge colors */
+  .blood-badge {
+    @apply inline-flex items-center justify-center w-12 h-12 rounded-full text-sm font-bold border-2;
+  }
+  .blood-badge-red {
+    @apply bg-blood-900/40 text-blood-300 border-blood-700;
+  }
+
+  /* Glow effect */
+  .glow-red {
+    box-shadow: 0 0 30px rgba(225, 29, 72, 0.3);
+  }
+  .glow-red-sm {
+    box-shadow: 0 0 15px rgba(225, 29, 72, 0.2);
+  }
+
+  /* Glass card */
+  .glass {
+    @apply bg-gray-900/60 backdrop-blur-xl border border-white/5;
+  }
+
+  /* Page section */
+  .page-section {
+    @apply min-h-screen py-8;
+  }
+
+  /* Form inputs */
+  .input {
+    @apply w-full bg-gray-800/80 border border-gray-700 rounded-xl px-4 py-3 text-gray-100
+           placeholder-gray-500 focus:outline-none focus:border-blood-500 focus:ring-2
+           focus:ring-blood-500/20 transition-all duration-200;
+  }
+
+  .label {
+    @apply block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r
+           from-blood-600 to-blood-700 hover:from-blood-500 hover:to-blood-600
+           text-white font-semibold rounded-xl transition-all duration-200
+           shadow-lg shadow-blood-900/50 hover:shadow-blood-700/40
+           hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50
+           disabled:cursor-not-allowed disabled:transform-none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-800
+           hover:bg-gray-700 text-gray-100 font-semibold rounded-xl transition-all
+           duration-200 border border-gray-700 hover:border-gray-600
+           hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-900/30
+           hover:bg-red-800/50 text-red-400 hover:text-red-300 font-semibold rounded-lg
+           transition-all duration-200 border border-red-900/50 text-sm;
+  }
+
+  .btn-success {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-900/30
+           hover:bg-emerald-800/50 text-emerald-400 hover:text-emerald-300 font-semibold
+           rounded-lg transition-all duration-200 border border-emerald-900/50 text-sm;
+  }
+
+  /* Stat card */
+  .stat-card {
+    @apply glass rounded-2xl p-6 flex flex-col gap-2 hover:border-blood-800/40
+           transition-all duration-300 hover:-translate-y-1 glow-red-sm;
+  }
+
+  /* Donor card */
+  .donor-card {
+    @apply glass rounded-2xl p-5 hover:border-blood-700/40 transition-all duration-300
+           hover:-translate-y-1 hover:shadow-xl hover:shadow-blood-900/20 cursor-pointer;
+  }
+
+  /* Spinner */
+  .spinner {
+    @apply w-10 h-10 border-3 border-gray-700 border-t-blood-500 rounded-full
+           animate-spin mx-auto my-8;
+  }
+}
+
+@layer utilities {
+  .border-3 {
+    border-width: 3px;
+  }
+  .text-gradient {
+    @apply bg-gradient-to-r from-white via-gray-100 to-blood-300
+           bg-clip-text text-transparent;
+  }
+  .text-gradient-red {
+    @apply bg-gradient-to-r from-blood-400 to-blood-600
+           bg-clip-text text-transparent;
+  }
+}
