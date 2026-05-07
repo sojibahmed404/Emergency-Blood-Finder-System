@@ -9,6 +9,9 @@ import { FiSearch, FiFilter, FiX } from 'react-icons/fi'
 const BLOOD_GROUPS = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
 const LOCATIONS    = ['', 'Belkuchi', 'Shahjadpur', 'Ullapara', 'Sirajganj', 'Sirajganj sodor', 'Enayetpur', 'Tangail']
 
+// In-memory cache to store search results for instant repeated queries
+const searchCache = {}
+
 export default function SearchPage() {
   const { isLoggedIn, isReceiver } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -20,16 +23,36 @@ export default function SearchPage() {
   const [searched,   setSearched]   = useState(false)
   const [selected,   setSelected]   = useState(null)
 
-  // Auto-search if URL has params
+  // Auto-search if URL has params, or pre-warm backend in background if empty
   useEffect(() => {
     if (searchParams.get('bloodGroup') || searchParams.get('location')) {
       handleSearch()
+    } else {
+      // Background pre-fetch to wake up Render server and cache 'all' results
+      const cacheKey = '_'
+      donorService.search({})
+        .then(data => {
+          searchCache[cacheKey] = data
+        })
+        .catch(() => {})
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function handleSearch(e) {
     if (e) e.preventDefault()
+    
+    const cacheKey = `${bloodGroup}_${location}`
+    if (searchCache[cacheKey]) {
+      setDonors(searchCache[cacheKey])
+      setSearched(true)
+      const params = {}
+      if (bloodGroup) params.bloodGroup = bloodGroup
+      if (location)   params.location   = location
+      setSearchParams(params)
+      return
+    }
+
     setLoading(true)
     setSearched(true)
     try {
@@ -37,6 +60,7 @@ export default function SearchPage() {
       if (bloodGroup) params.bloodGroup = bloodGroup
       if (location)   params.location   = location
       const data = await donorService.search(params)
+      searchCache[cacheKey] = data
       setDonors(data)
       setSearchParams(params)
     } catch {
