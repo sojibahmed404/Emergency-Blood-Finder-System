@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { donorService } from '../services/donorService'
-import { FiDroplet, FiSearch, FiUsers, FiHeart, FiArrowRight, FiShield, FiZap } from 'react-icons/fi'
+import { FiDroplet, FiSearch, FiUsers, FiHeart, FiArrowRight, FiShield, FiZap, FiWifi } from 'react-icons/fi'
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
 
@@ -15,18 +15,60 @@ const STEPS = [
 export default function Home() {
   const { isLoggedIn } = useAuth()
   const [stats, setStats] = useState({ donors: 0, locations: 0 })
+  const [serverWaking, setServerWaking] = useState(false)
+  const [countdown, setCountdown] = useState(60)
+  const timerRef = useRef(null)
 
   useEffect(() => {
+    // Start a 3-second delay — if data hasn't loaded, show wakeup banner
+    const wakeTimer = setTimeout(() => setServerWaking(true), 3000)
+
     donorService.getAll().then(donors => {
+      clearTimeout(wakeTimer)
+      clearInterval(timerRef.current)
+      setServerWaking(false)
       setStats({
         donors: donors.length,
         locations: [...new Set(donors.map(d => d.location).filter(Boolean))].length,
       })
-    }).catch(() => {})
+    }).catch(() => {
+      clearTimeout(wakeTimer)
+    })
+
+    return () => clearTimeout(wakeTimer)
   }, [])
+
+  // Countdown timer when server is waking
+  useEffect(() => {
+    if (serverWaking) {
+      setCountdown(60)
+      timerRef.current = setInterval(() => {
+        setCountdown(prev => {
+          if (prev <= 1) { clearInterval(timerRef.current); return 0 }
+          return prev - 1
+        })
+      }, 1000)
+    }
+    return () => clearInterval(timerRef.current)
+  }, [serverWaking])
 
   return (
     <div className="space-y-6 animate-fade-in">
+
+      {/* ── Server Wakeup Banner ──────────────────────────── */}
+      {serverWaking && (
+        <div className="flex items-start gap-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-4">
+          <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-800/40 flex items-center justify-center flex-shrink-0">
+            <FiWifi className="text-amber-600 dark:text-amber-400 animate-pulse text-xl" />
+          </div>
+          <div>
+            <p className="font-bold text-amber-800 dark:text-amber-300 text-sm">সার্ভার চালু হচ্ছে... ⏳</p>
+            <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">
+              ফ্রি সার্ভার কিছুক্ষণ নিষ্ক্রিয় ছিল। ডেটা লোড হতে আরও প্রায় {countdown} সেকেন্ড লাগবে। অনুগ্রহ করে অপেক্ষা করুন।
+            </p>
+          </div>
+        </div>
+      )}
       
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="bg-white dark:bg-[#111b21] transition-colors border border-gray-200 dark:border-gray-800 transition-colors rounded-3xl p-8 sm:p-12 lg:p-16 shadow-sm relative overflow-hidden">
