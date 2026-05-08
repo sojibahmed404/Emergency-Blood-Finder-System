@@ -18,56 +18,58 @@ export default function SearchPage() {
 
   const [bloodGroup, setBloodGroup] = useState(searchParams.get('bloodGroup') || '')
   const [location,   setLocation]   = useState(searchParams.get('location')   || '')
+  
+  // Store all donors pre-loaded from server
+  const [allDonors,  setAllDonors]  = useState([])
   const [donors,     setDonors]     = useState([])
   const [loading,    setLoading]    = useState(false)
   const [searched,   setSearched]   = useState(false)
   const [selected,   setSelected]   = useState(null)
 
-  // Auto-search if URL has params, or pre-warm backend in background if empty
+  // Fetch all donors once when page mounts
   useEffect(() => {
-    if (searchParams.get('bloodGroup') || searchParams.get('location')) {
-      handleSearch()
-    } else {
-      // Background pre-fetch to wake up Render server and cache 'all' results
-      const cacheKey = '_'
-      donorService.search({})
-        .then(data => {
-          searchCache[cacheKey] = data
-        })
-        .catch(() => {})
-    }
+    setLoading(true)
+    donorService.search({})
+      .then(data => {
+        setAllDonors(data)
+        
+        // If URL has initial search params, apply filter immediately
+        const initialBlood = searchParams.get('bloodGroup') || ''
+        const initialLoc = searchParams.get('location') || ''
+        if (initialBlood || initialLoc) {
+          const results = data.filter(donor => {
+            const matchBlood = !initialBlood || donor.bloodGroup === initialBlood
+            const matchLoc = !initialLoc || donor.location.toLowerCase().includes(initialLoc.toLowerCase())
+            return matchBlood && matchLoc
+          })
+          setDonors(results)
+          setSearched(true)
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false)
+      })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  async function handleSearch(e) {
+  function handleSearch(e) {
     if (e) e.preventDefault()
-    
-    const cacheKey = `${bloodGroup}_${location}`
-    if (searchCache[cacheKey]) {
-      setDonors(searchCache[cacheKey])
-      setSearched(true)
-      const params = {}
-      if (bloodGroup) params.bloodGroup = bloodGroup
-      if (location)   params.location   = location
-      setSearchParams(params)
-      return
-    }
-
-    setLoading(true)
     setSearched(true)
-    try {
-      const params = {}
-      if (bloodGroup) params.bloodGroup = bloodGroup
-      if (location)   params.location   = location
-      const data = await donorService.search(params)
-      searchCache[cacheKey] = data
-      setDonors(data)
-      setSearchParams(params)
-    } catch {
-      setDonors([])
-    } finally {
-      setLoading(false)
-    }
+
+    // INSTANT in-memory filtering of pre-loaded donors
+    const results = allDonors.filter(donor => {
+      const matchBlood = !bloodGroup || donor.bloodGroup === bloodGroup
+      const matchLoc = !location || donor.location.toLowerCase().includes(location.toLowerCase())
+      return matchBlood && matchLoc
+    })
+
+    setDonors(results)
+
+    const params = {}
+    if (bloodGroup) params.bloodGroup = bloodGroup
+    if (location)   params.location   = location
+    setSearchParams(params)
   }
 
   function clearFilters() {
