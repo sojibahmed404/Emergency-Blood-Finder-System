@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { donorService } from '../services/donorService'
 import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
 import RequestModal from '../components/RequestModal'
 import {
   FiArrowLeft, FiMapPin, FiPhone, FiCalendar,
   FiMail, FiCheckCircle, FiXCircle, FiDroplet,
-  FiMessageCircle
+  FiMessageCircle, FiLock, FiUser
 } from 'react-icons/fi'
 
 const BG_COLORS = {
@@ -23,6 +24,7 @@ const BG_COLORS = {
 export default function DonorProfile() {
   const { id } = useParams()
   const { isLoggedIn, isReceiver } = useAuth()
+  const { lang, t } = useLanguage()
   const [donor,   setDonor]   = useState(null)
   const [loading, setLoading] = useState(true)
   const [error,   setError]   = useState('')
@@ -113,43 +115,58 @@ export default function DonorProfile() {
 
           {/* Direct Contact Buttons */}
           <div className="mb-8">
-            <h3 className="font-heading font-bold text-lg text-gray-800 dark:text-gray-200 mb-4">Direct Contact</h3>
-            <div className="flex flex-col sm:flex-row gap-3">
-              {donor.phone && donor.phone !== '—' && (
-                <>
-                  {/* Call Button */}
-                  <a href={`tel:${donor.phone}`} className="flex-1 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors border border-red-100 shadow-sm hover:shadow-md">
-                    <FiPhone className="text-lg" /> Call Now
-                  </a>
-                  
-                  {/* WhatsApp Button */}
+            <h3 className="font-heading font-bold text-lg text-gray-800 dark:text-gray-200 mb-4">{t('directContact')}</h3>
+            
+            {isLoggedIn ? (
+              <div className="flex flex-col sm:flex-row gap-3">
+                {donor.phone && donor.phone !== '—' && (
+                  <>
+                    {/* Call Button */}
+                    <a href={`tel:${donor.phone}`} className="flex-1 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors border border-red-100 shadow-sm hover:shadow-md">
+                      <FiPhone className="text-lg" /> {t('callNow')}
+                    </a>
+                    
+                    {/* WhatsApp Button */}
+                    <a 
+                      href={`https://wa.me/${
+                        donor.phone.replace(/[^0-9+]/g, '').startsWith('01') && donor.phone.replace(/[^0-9+]/g, '').length === 11
+                          ? '88' + donor.phone.replace(/[^0-9+]/g, '')
+                          : donor.phone.replace(/[^0-9]/g, '')
+                      }`} 
+                      target="_blank" rel="noopener noreferrer" 
+                      className="flex-1 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors border border-emerald-100 shadow-sm hover:shadow-md"
+                    >
+                      <FiMessageCircle className="text-lg" /> {t('whatsapp')}
+                    </a>
+                  </>
+                )}
+                
+                {/* Email / Gmail Button */}
+                {donor.email && !donor.email.includes("manual_") && (
                   <a 
-                    href={`https://wa.me/${
-                      donor.phone.replace(/[^0-9+]/g, '').startsWith('01') && donor.phone.replace(/[^0-9+]/g, '').length === 11
-                        ? '88' + donor.phone.replace(/[^0-9+]/g, '')
-                        : donor.phone.replace(/[^0-9]/g, '')
-                    }`} 
+                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${donor.email}`} 
                     target="_blank" rel="noopener noreferrer" 
-                    className="flex-1 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors border border-emerald-100 shadow-sm hover:shadow-md"
+                    className="flex-1 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors border border-blue-100 shadow-sm hover:shadow-md"
                   >
-                    <FiMessageCircle className="text-lg" /> WhatsApp
+                    <FiMail className="text-lg" /> {t('gmail')}
                   </a>
-                </>
-              )}
-              
-              {/* Email / Gmail Button */}
-              {donor.email && !donor.email.includes("manual_") && (
-                <a 
-                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${donor.email}`} 
-                  target="_blank" rel="noopener noreferrer" 
-                  className="flex-1 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors border border-blue-100 shadow-sm hover:shadow-md"
-                >
-                  <FiMail className="text-lg" /> Gmail
-                </a>
-              )}
-            </div>
-            {!isLoggedIn && (
-              <p className="text-xs text-gray-500 mt-3 text-center">You can directly contact the donor without logging in using the options above.</p>
+                )}
+              </div>
+            ) : (
+              <div className="bg-gray-50 dark:bg-[#202c33] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center">
+                <FiLock className="mx-auto text-3xl text-gray-400 mb-3" />
+                <h4 className="text-gray-800 dark:text-gray-200 font-bold mb-2">
+                  {lang === 'bn' ? 'লগইন প্রয়োজন' : 'Login Required'}
+                </h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  {lang === 'bn' 
+                    ? 'ডোনারের ফোন নাম্বার বা ইমেইল দেখতে এবং যোগাযোগ করতে দয়া করে লগইন করুন।' 
+                    : 'Please login to view contact details and contact the donor directly.'}
+                </p>
+                <Link to="/login" className="inline-flex items-center gap-2 px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-colors">
+                  <FiUser /> {t('login')}
+                </Link>
+              </div>
             )}
           </div>
 
