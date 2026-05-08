@@ -9,8 +9,8 @@ import { FiSearch, FiFilter, FiX } from 'react-icons/fi'
 const BLOOD_GROUPS = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
 const LOCATIONS    = ['', 'Belkuchi', 'Shahjadpur', 'Ullapara', 'Sirajganj', 'Sirajganj sodor', 'Enayetpur', 'Tangail']
 
-// In-memory cache to store search results for instant repeated queries
-const searchCache = {}
+// Global in-memory cache to store all pre-loaded donors across page navigations
+let globalAllDonorsCache = null
 
 export default function SearchPage() {
   const { isLoggedIn, isReceiver } = useAuth()
@@ -20,36 +20,44 @@ export default function SearchPage() {
   const [location,   setLocation]   = useState(searchParams.get('location')   || '')
   
   // Store all donors pre-loaded from server
-  const [allDonors,  setAllDonors]  = useState([])
+  const [allDonors,  setAllDonors]  = useState(globalAllDonorsCache || [])
   const [donors,     setDonors]     = useState([])
-  const [loading,    setLoading]    = useState(false)
+  const [loading,    setLoading]    = useState(!globalAllDonorsCache)
   const [searched,   setSearched]   = useState(false)
   const [selected,   setSelected]   = useState(null)
 
   // Fetch all donors once when page mounts
   useEffect(() => {
-    setLoading(true)
-    donorService.search({})
-      .then(data => {
-        setAllDonors(data)
-        
-        // If URL has initial search params, apply filter immediately
-        const initialBlood = searchParams.get('bloodGroup') || ''
-        const initialLoc = searchParams.get('location') || ''
-        if (initialBlood || initialLoc) {
-          const results = data.filter(donor => {
-            const matchBlood = !initialBlood || donor.bloodGroup === initialBlood
-            const matchLoc = !initialLoc || donor.location.toLowerCase().includes(initialLoc.toLowerCase())
-            return matchBlood && matchLoc
-          })
-          setDonors(results)
-          setSearched(true)
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        setLoading(false)
-      })
+    const applyInitialFilter = (data) => {
+      const initialBlood = searchParams.get('bloodGroup') || ''
+      const initialLoc = searchParams.get('location') || ''
+      if (initialBlood || initialLoc) {
+        const results = data.filter(donor => {
+          const matchBlood = !initialBlood || donor.bloodGroup === initialBlood
+          const matchLoc = !initialLoc || donor.location.toLowerCase().includes(initialLoc.toLowerCase())
+          return matchBlood && matchLoc
+        })
+        setDonors(results)
+        setSearched(true)
+      }
+    }
+
+    if (globalAllDonorsCache) {
+      setAllDonors(globalAllDonorsCache)
+      applyInitialFilter(globalAllDonorsCache)
+    } else {
+      setLoading(true)
+      donorService.search({})
+        .then(data => {
+          globalAllDonorsCache = data
+          setAllDonors(data)
+          applyInitialFilter(data)
+        })
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false)
+        })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
