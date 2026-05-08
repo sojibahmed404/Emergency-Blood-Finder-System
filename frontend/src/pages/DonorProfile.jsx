@@ -95,11 +95,11 @@ export default function DonorProfile() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             {[
-              { icon: FiDroplet,  label: 'Blood Group',    value: donor.bloodGroup },
-              { icon: FiMapPin,   label: 'Location',       value: donor.location || '—' },
-              { icon: FiPhone,    label: 'Phone',          value: donor.phone    || '—' },
-              { icon: FiCalendar, label: 'Last Donated',   value: donor.lastDonated || 'Not specified' },
-              { icon: FiMail,     label: 'Email',          value: donor.email },
+              { icon: FiDroplet,  label: t('bloodGroup'),   value: donor.bloodGroup },
+              { icon: FiMapPin,   label: t('location'),     value: donor.location || '—' },
+              { icon: FiPhone,    label: t('phone'),        value: isLoggedIn ? (donor.phone || '—') : '🔒 ' + (lang === 'bn' ? 'লগইন করুন' : 'Login to view') },
+              { icon: FiCalendar, label: t('lastDonated'),  value: donor.lastDonated || (lang === 'bn' ? 'উল্লেখ নেই' : 'Not specified') },
+              { icon: FiMail,     label: t('emailAddress'), value: isLoggedIn ? donor.email : '🔒 ' + (lang === 'bn' ? 'লগইন করুন' : 'Login to view') },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 dark:bg-[#202c33] transition-colors border border-gray-100 dark:border-gray-800 transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#111b21] transition-colors shadow-sm flex items-center justify-center flex-shrink-0">
@@ -107,7 +107,11 @@ export default function DonorProfile() {
                 </div>
                 <div>
                   <p className="text-[11px] font-bold text-gray-400 dark:text-gray-500 transition-colors uppercase tracking-wider">{label}</p>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 transition-colors mt-0.5">{value}</p>
+                  <p className={`text-sm font-semibold transition-colors mt-0.5 ${
+                    !isLoggedIn && (label === t('phone') || label === t('emailAddress'))
+                      ? 'text-gray-400 dark:text-gray-600 italic'
+                      : 'text-gray-800 dark:text-gray-200'
+                  }`}>{value}</p>
                 </div>
               </div>
             ))}
