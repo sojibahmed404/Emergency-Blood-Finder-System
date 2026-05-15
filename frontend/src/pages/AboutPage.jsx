@@ -15,8 +15,8 @@ export default function AboutPage() {
 
   const members = [
     { name: 'Md Sojib Ahmed',    role: lang === 'bn' ? 'ফুল-স্ট্যাক ডেভেলপার' : 'Full-Stack Developer' },
-    { name: 'Team Member 2',  role: lang === 'bn' ? 'ব্যাকএন্ড ডেভেলপার'   : 'Backend Developer' },
-    { name: 'Team Member 3',  role: lang === 'bn' ? 'ফ্রন্টএন্ড ডেভেলপার'  : 'Frontend Developer' },
+    { name: 'Anamika Jahan',   role: lang === 'bn' ? 'ব্যাকএন্ড ডেভেলপার'   : 'Backend Developer' },
+    { name: 'Annana Khandakar', role: lang === 'bn' ? 'ফ্রন্টএন্ড ডেভেলপার'  : 'Frontend Developer' },
   ]
 
   return (

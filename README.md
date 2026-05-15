@@ -32,7 +32,14 @@ A full-stack web application to find blood donors in emergency situations, built
 
 ---
 
-## 📋 Prerequisites
+## � Developer Team
+
+- **Team Member 2:** Anamika Jahan
+- **Team Member 3:** Annana Khandakar
+
+---
+
+## �📋 Prerequisites
 
 - **Java 17+** (check: `java -version`)
 - **Maven 3.8+** (check: `mvn -version`)
@@ -81,15 +88,15 @@ SELECT COUNT(*) FROM blood_banks; -- Should be 10
 cd project2.1/backend
 ```
 
-2. Configure database credentials in `src/main/resources/application.properties`:
+2. Configure database credentials in `src/main/resources/application.properties` or via environment variables:
 ```properties
 spring.datasource.username=root
 spring.datasource.password=your_mysql_password
 ```
 
-3. Run the backend:
+3. Run the backend locally:
 ```bash
-
+mvn spring-boot:run
 ```
 
 Or build and run the JAR:
@@ -98,7 +105,34 @@ mvn clean package -DskipTests
 java -jar target/blood-finder-backend-2.1.0.jar
 ```
 
-The API starts at **http://localhost:8080**
+### Docker deployment
+
+Build and run the backend container:
+```bash
+cd project2.1/backend
+docker build -t bloodfinder-backend .
+docker run -p 8080:8080 --env DB_URL=jdbc:mysql://localhost:3306/blood_finder_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true --env DB_USER=root --env DB_PASS=your_password bloodfinder-backend
+```
+
+### Proxmox / VM deployment
+
+If you want to host the backend on Proxmox, the easiest path is:
+
+1. Create a Linux VM or LXC container on Proxmox.
+2. Install Docker and Docker Compose inside that VM/container.
+3. Copy this repository into the VM or pull it from Git.
+4. From the repo root, run:
+```bash
+docker compose up -d
+```
+
+This will start:
+- `backend` on port `8080`
+- `mysql` on port `3306`
+
+> In Proxmox, ensure the VM/container has network access and the host firewall allows the backend port.
+
+The API starts at **http://<PROXMOX_VM_IP>:8080**
 
 ---
 
