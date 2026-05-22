@@ -72,31 +72,31 @@ export default function Home() {
       
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="bg-white dark:bg-[#111b21] transition-colors border border-gray-200 dark:border-gray-800 transition-colors rounded-3xl p-8 sm:p-12 lg:p-16 shadow-sm relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
+        <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none animate-float">
           <FiDroplet className="w-64 h-64 text-red-900" />
         </div>
         
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-50 border border-red-100 text-red-600 text-sm font-semibold mb-6">
-            <FiDroplet className="animate-pulse-slow" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-50 border border-red-100 text-red-600 text-sm font-semibold mb-6 animate-fadeInDown animate-glow-badge animate-badge-pulse">
+            <FiDroplet className="animate-pulse-subtle" />
             Emergency Blood Finder System v2.1
           </div>
 
-          <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6 text-gray-900 dark:text-gray-100 transition-colors">
+          <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6 text-gray-900 dark:text-gray-100 transition-colors animate-fadeInUp delay-200">
             Save Lives with <br/>
             <span className="text-red-600">One Search</span>
           </h1>
 
-          <p className="text-gray-500 dark:text-gray-400 transition-colors text-lg mb-8 max-w-2xl">
+          <p className="text-gray-500 dark:text-gray-400 transition-colors text-lg mb-8 max-w-2xl animate-fadeInUp delay-300">
             Find blood donors in your area instantly. Connect with verified donors and get the blood you need in emergency situations — fast and free.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <Link to="/search" className="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-red-500/30 flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center gap-4 animate-fadeInUp delay-400">
+            <Link to="/search" className="px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all shadow-md shadow-red-500/30 flex items-center gap-2 hover:scale-105 transform transition-transform">
               <FiSearch /> Search Donors Now
             </Link>
             {!isLoggedIn && (
-              <Link to="/add-donor" className="px-8 py-3.5 bg-white dark:bg-[#111b21] transition-colors border border-gray-300 dark:border-gray-700 transition-colors text-gray-700 hover:bg-gray-50 font-semibold rounded-xl transition-all flex items-center gap-2">
+              <Link to="/add-donor" className="px-8 py-3.5 bg-white dark:bg-[#111b21] transition-colors border border-gray-300 dark:border-gray-700 transition-colors text-gray-700 hover:bg-gray-50 font-semibold rounded-xl transition-all flex items-center gap-2 hover:scale-105 transform transition-transform">
                 Add a Donor <FiArrowRight />
               </Link>
             )}
@@ -111,7 +111,11 @@ export default function Home() {
             { value: BLOOD_GROUPS.length, label: 'Blood Groups' },
             { value: '24/7', label: 'Emergency Support' },
           ].map((s, i) => (
-            <div key={i} className="bg-gray-50 dark:bg-[#202c33] transition-colors rounded-2xl p-4 text-center border border-gray-100 dark:border-gray-800 transition-colors">
+            <div 
+              key={i} 
+              className="bg-gray-50 dark:bg-[#202c33] transition-colors rounded-2xl p-4 text-center border border-gray-100 dark:border-gray-800 transition-colors animate-fadeInUp"
+              style={{ animationDelay: `${400 + i * 100}ms` }}
+            >
               <div className="text-2xl sm:text-3xl font-heading font-black text-red-600">
                 {s.value}
               </div>
