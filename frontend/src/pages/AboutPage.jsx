@@ -9,7 +9,7 @@ export default function AboutPage() {
     [t('version'),    'v2.1.0'],
     [t('team'),       'Code Cube'],
     [t('university'), 'Khwaja Yunus Ali University'],
-    [t('backend'),    'Spring Boot 3.4 (Java)'],
+    [t('backend'),    'Supabase Edge Functions'],
     [t('frontend'),   'React + Vite + Tailwind CSS'],
   ]
 
@@ -92,7 +92,7 @@ export default function AboutPage() {
             </h2>
           </div>
           <div className="flex flex-wrap gap-2">
-            {['Spring Boot', 'Java', 'MySQL', 'JWT', 'React', 'Vite', 'Tailwind CSS', 'REST API'].map(tech => (
+            {['Supabase Edge Functions', 'PostgreSQL', 'JWT', 'React', 'Vite', 'Tailwind CSS', 'REST API'].map(tech => (
               <span key={tech} className="px-3 py-1.5 bg-gray-100 dark:bg-[#202c33] text-gray-700 dark:text-gray-300 text-xs font-semibold rounded-lg border border-gray-200 dark:border-gray-700">
                 {tech}
               </span>

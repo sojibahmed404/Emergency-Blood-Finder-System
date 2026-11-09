@@ -1,6 +1,6 @@
 # 🩸 Emergency Blood Finder System v2.1
 
-A full-stack web application to find blood donors in emergency situations, built with React.js + Tailwind CSS (frontend) and Java Spring Boot + MySQL (backend).
+A full-stack web application to find blood donors in emergency situations, built with React.js + Tailwind CSS (frontend) and Supabase Edge Functions + PostgreSQL (backend).
 
 ---
 
@@ -9,10 +9,10 @@ A full-stack web application to find blood donors in emergency situations, built
 | Layer     | Technology               |
 |-----------|--------------------------|
 | Frontend  | React 18 + Vite + Tailwind CSS v3 |
-| Backend   | Java 17 + Spring Boot 3.2.4 |
-| Database  | MySQL 8.0                |
-| Auth      | JWT (jjwt 0.11.5)        |
-| Security  | Spring Security 6        |
+| Backend   | Supabase Edge Functions    |
+| Database  | PostgreSQL (Supabase)    |
+| Auth      | JWT (jose)              |
+| Security  | Edge Function role checks |
 
 ---
 
@@ -41,34 +41,36 @@ A full-stack web application to find blood donors in emergency situations, built
 
 ## �📋 Prerequisites
 
-- **Java 17+** (check: `java -version`)
-- **Maven 3.8+** (check: `mvn -version`)
 - **Node.js 18+** (check: `node -v`)
-- **MySQL 8.0+** running on port 3306
+- A Supabase project and the Supabase CLI
+- Java 21+ and Maven only if using the legacy Spring Boot backend locally
 
 ---
 
-## 🗄️ Database Setup
+## 🗄️ Supabase Database Setup
 
-1. Open MySQL and run the schema file:
+1. Create a Supabase project and open **SQL Editor**.
+2. Run [`database/supabase-schema.sql`](./database/supabase-schema.sql).
+3. For a new project using the included starter dataset, run [`database/supabase-seed.sql`](./database/supabase-seed.sql) once. If preserving an existing Render/MySQL database, import that export instead; do not seed on top of existing records. Import in this order: `users`, `donors`, `blood_banks`, `requests`, preserving IDs, timestamps, and password hashes. Do not remove the old database before verifying imported data.
+4. After importing existing IDs, run [`database/supabase-reset-sequences.sql`](./database/supabase-reset-sequences.sql).
+5. In **Edge Functions → Secrets**, set `JWT_SECRET` to a private random secret at least 32 characters long. Supabase supplies `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to Edge Functions automatically. Never put the service-role key in the frontend or Vercel.
+6. Deploy the Edge Function from the repository root:
+   ```bash
+   supabase functions deploy api --no-verify-jwt
+   ```
+   `verify_jwt` is disabled because this project uses its own JWT. The function validates that token and the user's role itself.
+7. In Vercel, add `VITE_SUPABASE_URL` (the project URL) and `VITE_SUPABASE_ANON_KEY` (the public anon/publishable key), then redeploy the frontend.
+8. Test donor search, login, registration, requests, and admin actions on the live site. Only after these pass should you remove the old Render backend/database.
 
+Compare these counts in Supabase against the old database before switching traffic:
 ```sql
--- In MySQL Workbench, DBeaver, or CLI:
-SOURCE C:/Users/user/Desktop/project2.1/database/schema.sql;
+SELECT COUNT(*) FROM public.users;
+SELECT COUNT(*) FROM public.donors;
+SELECT COUNT(*) FROM public.blood_banks;
+SELECT COUNT(*) FROM public.requests;
 ```
 
-Or via CLI:
-```bash
-mysql -u root -p < database/schema.sql
-```
-
-2. Verify the database:
-```sql
-USE blood_finder_db;
-SELECT COUNT(*) FROM users;   -- Should be 38 (1 admin + 37 donors)
-SELECT COUNT(*) FROM donors;  -- Should be 37
-SELECT COUNT(*) FROM blood_banks; -- Should be 10
-```
+The tables have row-level security enabled. The browser only calls the Edge Function; its service-role key is server-side and must never be exposed publicly.
 
 ### Default Credentials
 
@@ -79,60 +81,13 @@ SELECT COUNT(*) FROM blood_banks; -- Should be 10
 
 **Example donor login:** `rakibul19980101@gmail.com` / `donor123`
 
+These are the original seed credentials if those seed accounts exist in the imported database. Existing password hashes are preserved.
+
 ---
 
-## ⚙️ Backend Setup
+## ⚙️ Edge Function Setup
 
-1. Navigate to the backend folder:
-```bash
-cd project2.1/backend
-```
-
-2. Configure database credentials in `src/main/resources/application.properties` or via environment variables:
-```properties
-spring.datasource.username=root
-spring.datasource.password=your_mysql_password
-```
-
-3. Run the backend locally:
-```bash
-mvn spring-boot:run
-```
-
-Or build and run the JAR:
-```bash
-mvn clean package -DskipTests
-java -jar target/blood-finder-backend-2.1.0.jar
-```
-
-### Docker deployment
-
-Build and run the backend container:
-```bash
-cd project2.1/backend
-docker build -t bloodfinder-backend .
-docker run -p 8080:8080 --env DB_URL=jdbc:mysql://localhost:3306/blood_finder_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true --env DB_USER=root --env DB_PASS=your_password bloodfinder-backend
-```
-
-### Proxmox / VM deployment
-
-If you want to host the backend on Proxmox, the easiest path is:
-
-1. Create a Linux VM or LXC container on Proxmox.
-2. Install Docker and Docker Compose inside that VM/container.
-3. Copy this repository into the VM or pull it from Git.
-4. From the repo root, run:
-```bash
-docker compose up -d
-```
-
-This will start:
-- `backend` on port `8080`
-- `mysql` on port `3306`
-
-> In Proxmox, ensure the VM/container has network access and the host firewall allows the backend port.
-
-The API starts at **http://<PROXMOX_VM_IP>:8080**
+The live API is the Supabase Edge Function in `supabase/functions/api`. Install the [Supabase CLI](https://supabase.com/docs/guides/cli), create a Supabase project, and follow the setup steps above. The legacy Spring Boot backend under `backend/` is not used by the Vercel production site.
 
 ---
 
@@ -157,23 +112,15 @@ The app opens at **http://localhost:5173**
 
 ---
 
-## 🚀 Running Both Together
+## 🚀 Running Locally
 
-Open two terminals:
-
-**Terminal 1 — Backend:**
+Run the frontend locally:
 ```bash
-cd project2.1/backend
-mvn spring-boot:run
-```
-
-**Terminal 2 — Frontend:**
-```bash
-cd project2.1/frontend
+cd frontend
 npm run dev
 ```
 
-Open **http://localhost:5174** in your browser.
+Copy `frontend/.env.example` to `frontend/.env.local`, then set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` to use the deployed Supabase Edge Function. Keep the Supabase service-role key and `JWT_SECRET` only in Edge Function secrets; never put them in the frontend.
 
 ---
 
@@ -295,18 +242,18 @@ project2.1/
 │   └── vite.config.js
 │
 └── database/
-    └── schema.sql
+    ├── schema.sql
+    ├── supabase-schema.sql
+    └── supabase-reset-sequences.sql
 ```
 
 ---
 
 ## 🔧 Configuration
 
-### Change MySQL Password
-Edit `backend/src/main/resources/application.properties`:
-```properties
-spring.datasource.password=YOUR_MYSQL_PASSWORD
-```
+### Set the database connection
+Set the `DB_URL`, `DB_USER`, and `DB_PASS` environment variables for your PostgreSQL database. Never commit production credentials.
+
 
 ### Change JWT Secret (for production)
 ```properties

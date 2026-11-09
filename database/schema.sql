@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8080/api";-- ============================================================
+-- ============================================================
 -- Emergency Blood Finder System v2.1 — Database Schema
 -- MySQL 8.0+
 -- Run this ONCE to create and seed the database.
@@ -73,49 +73,49 @@ CREATE TABLE IF NOT EXISTS requests (
 -- Default Admin user  (password: admin123 — BCrypt hash)
 INSERT INTO users (name, email, password, role, status) VALUES
   ('Admin', 'admin@bloodfinder.com',
-   '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lihO',
+   '$2a$10$N9qo8uLOickgx2ZMRZoMyeMiMwiT/hYv/GXAzJLiUmBNwmYD4kh02',
    'ADMIN', 'ACTIVE');
 
 -- ── Real Donor Users (37 donors from dataset, password: donor123) ──
--- BCrypt hash for 'donor123': $2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6
+-- BCrypt hash for 'donor123': $2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi
 INSERT INTO users (name, email, password, role, status) VALUES
-  ('Md. Rakibul Islam',          'rakibul19980101@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Siam Hossain',               'siamhossain.cse18@gmail.com',      '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Radoun Hossin Mukta',    'redwanhossain957@gmail.com',       '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Shahariar Ahmed Kanon',  'shahariarkanon816@gmail.com',      '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Mst. Anamika Jahan',         'anamikajahann12@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Sojib Ahmed',            'mdsojibahmed544@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Mst. Ananna Khandaker',      'anuananna177@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Rakib Hasan Riyad',      'hasanrk2005@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Most. Khadija Khatun',       'tanzinmaria0101@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Rezwan Ahmed Ratul',     'rezwanahmedratul007@gmail.com',    '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Maruf Ibna Abdullah Rifat',  'marufibneabdullah51@gmail.com',    '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Rabbi',                  'rabbimollah2269@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Mst. Mushkat Jahan Shila',   'mashkatshila@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Ijaj Ahmed Rafi',            'rafi01752@gmail.com',              '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Sabbir Hossain Rahat',   'rahatbabu122@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Abid Hasan Hujaifa',         'abidhasanhujaifa1215@gmail.com',   '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Sabiha Rumman Medha',        'sabiha.rumman.10@gmail.com',       '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Intaj Hassan Nibir',     'intajnibir07@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Asif Foysal',            'asifshakhmd@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Fardin Khan Sadi',           'fardinkyau@gmail.com',             '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Abir Deb',                   'debabir82@gmail.com',              '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Bashudeb Kumer Paul',        'bashudebpaul9@gmail.com',          '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Abdur Rahim Ratul',      'mdabdurrahimratul2005@gmail.com',  '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Tahsin Tasnim Tandra',       'tandra8281@gmail.com',             '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Maream',                     'mareamtaherakib@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Imran Hassain',          'mdimranhossain4777@gmail.com',     '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Abu Sowad Mohammad Ali Siam','siamahmed224ry@gmail.com',         '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Fatima Rahman Shoshi',       'fatimarahmanshoshi31@gmail.com',   '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Rukaiya Rafiq Ulfa',         'rukaiyaulfa@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('S. M. Salman Farshi',        'salman.kyau@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Tawhidur Rahman Shishir',    'shishirpk07.bd@gmail.com',         '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Samiul Islam Shihab',    'shihab35.kyau@gmail.com',          '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Abu Raihan',             'bd01712692663@gmail.com',          '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Shimul Sarkar',          'shamimsarkar20004@gmail.com',      '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Khairun Nahar Sara',         'khairunnsara@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Md. Montasir Monir Alif',    'mr.alifpm16@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE'),
-  ('Tarak Rahman Shakib',        'tarak3552@gmail.com',              '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeH7SYWXZH.F8M7v0HXj8Gq0JyC9kqf6', 'DONOR', 'ACTIVE');
+  ('Md. Rakibul Islam',          'rakibul19980101@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Siam Hossain',               'siamhossain.cse18@gmail.com',      '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Radoun Hossin Mukta',    'redwanhossain957@gmail.com',       '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Shahariar Ahmed Kanon',  'shahariarkanon816@gmail.com',      '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Mst. Anamika Jahan',         'anamikajahann12@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Sojib Ahmed',            'mdsojibahmed544@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Mst. Ananna Khandaker',      'anuananna177@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Rakib Hasan Riyad',      'hasanrk2005@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Most. Khadija Khatun',       'tanzinmaria0101@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Rezwan Ahmed Ratul',     'rezwanahmedratul007@gmail.com',    '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Maruf Ibna Abdullah Rifat',  'marufibneabdullah51@gmail.com',    '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Rabbi',                  'rabbimollah2269@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Mst. Mushkat Jahan Shila',   'mashkatshila@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Ijaj Ahmed Rafi',            'rafi01752@gmail.com',              '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Sabbir Hossain Rahat',   'rahatbabu122@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Abid Hasan Hujaifa',         'abidhasanhujaifa1215@gmail.com',   '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Sabiha Rumman Medha',        'sabiha.rumman.10@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Intaj Hassan Nibir',     'intajnibir07@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Asif Foysal',            'asifshakhmd@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Fardin Khan Sadi',           'fardinkyau@gmail.com',             '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Abir Deb',                   'debabir82@gmail.com',              '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Bashudeb Kumer Paul',        'bashudebpaul9@gmail.com',          '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Abdur Rahim Ratul',      'mdabdurrahimratul2005@gmail.com',  '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Tahsin Tasnim Tandra',       'tandra8281@gmail.com',             '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Maream',                     'mareamtaherakib@gmail.com',        '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Imran Hassain',          'mdimranhossain4777@gmail.com',     '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Abu Sowad Mohammad Ali Siam','siamahmed224ry@gmail.com',         '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Fatima Rahman Shoshi',       'fatimarahmanshoshi31@gmail.com',   '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Rukaiya Rafiq Ulfa',         'rukaiyaulfa@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('S. M. Salman Farshi',        'salman.kyau@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Tawhidur Rahman Shishir',    'shishirpk07.bd@gmail.com',         '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Samiul Islam Shihab',    'shihab35.kyau@gmail.com',          '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Abu Raihan',             'bd01712692663@gmail.com',          '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Shimul Sarkar',          'shamimsarkar20004@gmail.com',      '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Khairun Nahar Sara',         'khairunnsara@gmail.com',           '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Md. Montasir Monir Alif',    'mr.alifpm16@gmail.com',            '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE'),
+  ('Tarak Rahman Shakib',        'tarak3552@gmail.com',              '$2a$10$K/5Oeb6mWwJo2zO2YM2CXeqnvoMx0sax.I4qgTRS1/G/RFEdG1Wgi', 'DONOR', 'ACTIVE');
 
 -- ── Donor Profiles (blood_group enum values map to labels) ──
 -- user_id 2 = Rakibul (O+), 3 = Siam (B+), 4 = Mukta (O+), 5 = Kanon (B+),
